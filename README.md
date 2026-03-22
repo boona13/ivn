@@ -11,6 +11,8 @@ IVN gives your AI tools a project memory that survives across conversations. The
 - Security policy: [`SECURITY.md`](SECURITY.md)
 - Code of conduct: [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
 
+> Installation status: install IVN from GitHub with `npm install -g git+https://github.com/boona13/ivn.git`. `npm install -g ivn` is not available yet because npm blocked registration of the unscoped `ivn` package name as too similar to existing packages.
+
 ## The Problem
 
 Every AI conversation starts with amnesia. The LLM doesn't know why you chose PostgreSQL, what the Stripe webhook gotcha is, or what you spent 3 hours debugging last Tuesday. You re-explain everything. Every. Single. Time.
@@ -69,14 +71,16 @@ The LLM is the primary operator. It captures, classifies, links, and curates. Th
 ## Install
 
 ```bash
-# One-off
-npx ivn --help
+# Install from GitHub right now
+npm install -g git+https://github.com/boona13/ivn.git
 
-# Global
-npm install -g ivn
+# Verify the CLI is available
+ivn --help
 ```
 
 Supported runtime: Node `18+`.
+
+`npm install -g ivn` is not available yet. The project is live on GitHub, but npm blocked registration of the unscoped `ivn` package name because it is too similar to existing packages. Until that is resolved, install IVN directly from GitHub with the command above.
 
 Operational notes:
 - If `better-sqlite3` falls back to a source build on your platform, install the local build tooling required for native Node addons and rerun the install.
