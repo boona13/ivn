@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ivn": {
+      "command": "ivn",
+      "args": ["serve"]
+    }
+  }
+}

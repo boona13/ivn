@@ -1,0 +1,52 @@
+[
+  {
+    "key": "ivn-local",
+    "name": "IVN (local repo)",
+    "localPath": "..",
+    "importLast": 200,
+    "importPaths": ["README.md", "src"],
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Audit git-import provenance handling",
+        "fileBeingEdited": "src/git.ts",
+        "criticalFacts": ["source_ref", "git-import", "vague histories"]
+      },
+      {
+        "id": 2,
+        "title": "Review bulk acceptance safety",
+        "fileBeingEdited": "src/cli-commands-review.ts",
+        "criticalFacts": ["accept --all --force", "pending", "review"]
+      }
+    ]
+  },
+  {
+    "key": "hono-custom",
+    "name": "honojs/hono (custom manifest)",
+    "cloneUrl": "https://github.com/honojs/hono.git",
+    "importLast": 200,
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Add bearer auth to routes",
+        "fileBeingEdited": "src/middleware/bearer-auth/index.ts",
+        "criticalFacts": ["metacharacter", "escape", "regex"]
+      }
+    ]
+  },
+  {
+    "key": "openclaw-custom",
+    "name": "openclaw/openclaw (full relevant history)",
+    "cloneUrl": "https://github.com/openclaw/openclaw.git",
+    "importSince": "2025-11-24",
+    "importPaths": ["README.md", "src/browser", "src/memory", "src/plugin-sdk", "src/context-engine"],
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Maintain browser existing-session support",
+        "fileBeingEdited": "src/browser/server-context.ts",
+        "criticalFacts": ["existing-session", "chrome mcp", "cdpport/cdpurl"]
+      }
+    ]
+  }
+]

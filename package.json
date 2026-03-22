@@ -1,0 +1,72 @@
+{
+  "name": "ivn",
+  "version": "0.1.0",
+  "description": "A local-first memory layer for project decisions, gotchas, patterns, and context.",
+  "type": "module",
+  "files": [
+    "dist",
+    "examples",
+    "spec",
+    "README.md",
+    "LICENSE"
+  ],
+  "bin": {
+    "ivn": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "serve": "tsx src/cli.ts serve",
+    "lint": "biome lint --diagnostic-level=error src test scripts package.json tsconfig.json tsconfig.test.json biome.json",
+    "format": "biome format --write src test scripts package.json tsconfig.json tsconfig.test.json biome.json",
+    "format:check": "biome format --check src test scripts package.json tsconfig.json tsconfig.test.json biome.json",
+    "typecheck": "tsc --noEmit -p tsconfig.test.json",
+    "check": "npm run lint && npm run typecheck && npm test",
+    "release:check": "node scripts/release-check.mjs",
+    "pack:dry-run": "npm pack --dry-run",
+    "smoke:install": "node scripts/install-smoke.mjs",
+    "test": "tsx --test test/**/*.test.ts",
+    "postbuild": "node scripts/copy-web-assets.mjs && chmod +x dist/cli.js",
+    "prepack": "npm run build && npm run release:check"
+  },
+  "keywords": [
+    "ai",
+    "memory",
+    "context",
+    "developer-tools",
+    "knowledge-graph",
+    "mcp",
+    "persistent-memory"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boona13/ivn.git"
+  },
+  "homepage": "https://github.com/boona13/ivn#readme",
+  "bugs": {
+    "url": "https://github.com/boona13/ivn/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "better-sqlite3": "^12.8.0",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3"
+  },
+  "optionalDependencies": {
+    "@huggingface/transformers": "^3.8.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.8",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^25.5.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

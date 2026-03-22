@@ -1,0 +1,41 @@
+[
+  {
+    "key": "openclaw-full",
+    "name": "openclaw/openclaw (full relevant history)",
+    "cloneUrl": "https://github.com/openclaw/openclaw.git",
+    "importSince": "2025-11-24",
+    "importPaths": [
+      "README.md",
+      "src/browser",
+      "src/memory",
+      "src/plugin-sdk",
+      "src/context-engine"
+    ],
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Maintain browser existing-session support",
+        "fileBeingEdited": "src/browser/server-context.ts",
+        "criticalFacts": ["existing-session", "chrome mcp", "cdpport/cdpurl"]
+      },
+      {
+        "id": 2,
+        "title": "Keep memory prompt plugin hook behavior",
+        "fileBeingEdited": "src/memory/prompt-section.ts",
+        "criticalFacts": ["pluggable system prompt section", "memory plugins", "exclusive slot"]
+      },
+      {
+        "id": 3,
+        "title": "Preserve plugin SDK compat surface",
+        "fileBeingEdited": "src/plugin-sdk/compat.ts",
+        "criticalFacts": ["root diagnostic compat", "bundled runtime barrels through public subpaths", "duplicate plugin sdk exports"]
+      },
+      {
+        "id": 4,
+        "title": "Preserve context-engine registry compatibility",
+        "fileBeingEdited": "src/context-engine/registry.ts",
+        "criticalFacts": ["pass incoming prompt to assemble", "context engine ownership", "sessionkey"]
+      }
+    ]
+  }
+]

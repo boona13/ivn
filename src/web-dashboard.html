@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ivn-dashboard-token" content="__IVN_DASHBOARD_TOKEN__">
+<title>ivn — Project Knowledge</title>
+<link rel="stylesheet" href="/assets/web-dashboard.css">
+</head>
+<body>
+<div class="header">
+  <div class="brand">
+    <div class="logo">IVN</div>
+    <div>
+      <h1 class="headline">Local-first project memory</h1>
+      <p class="subhead">Browse the durable decisions, gotchas, patterns, and todos already captured for this repo. Start with what needs attention, widen to recent changes or all knowledge, then switch to graph view when you want relationship context.</p>
+    </div>
+  </div>
+  <div class="stats" id="stats" aria-label="Knowledge stats"></div>
+</div>
+
+<div class="toolbar">
+  <label class="sr-only" for="search">Search project memory</label>
+  <input class="search" id="search" placeholder="Search decisions, gotchas, patterns..." autocomplete="off" aria-describedby="toolbar-hint results-summary">
+  <div class="chips" id="chips" role="group" aria-label="Filter by knowledge type"></div>
+  <div class="view-toggle" role="group" aria-label="Choose dashboard view">
+    <button type="button" class="view-btn active" data-view="cards" aria-pressed="true">Cards</button>
+    <button type="button" class="view-btn" data-view="graph" aria-pressed="false">Graph</button>
+  </div>
+</div>
+
+<div class="toolbar-meta">
+  <div class="toolbar-hint" id="toolbar-hint">Core loop in the browser: search what exists, filter by type, read details in cards, then inspect relationships in graph view.</div>
+  <div class="results-summary" id="results-summary" role="status" aria-live="polite"></div>
+</div>
+
+<div class="focus-strip">
+  <div>
+    <div class="focus-copy" id="focus-copy">Focus the dashboard on what needs attention first, then widen to recent changes or the full project memory set. Pending items can be accepted or rejected here, and stale entries can be refreshed.</div>
+    <div class="focus-status" id="focus-status" role="status" aria-live="polite"></div>
+  </div>
+  <div class="focus-buttons" id="focus-modes" role="group" aria-label="Choose dashboard focus"></div>
+</div>
+
+<main class="main">
+  <div class="content" id="card-view" aria-live="polite"></div>
+  <div id="graph-view" role="region" aria-label="Knowledge graph">
+    <svg id="graph-svg" role="img" aria-labelledby="graph-title"><title id="graph-title">Knowledge graph</title></svg>
+  </div>
+</main>
+
+<script src="/assets/web-dashboard.js" defer></script>
+</body>
+</html>

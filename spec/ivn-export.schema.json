@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ivn.local/spec/ivn-export.schema.json",
+  "title": "IVN Knowledge Export",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec",
+    "spec_version",
+    "version",
+    "exported_at",
+    "project",
+    "entries",
+    "edges"
+  ],
+  "properties": {
+    "spec": {
+      "const": "ivn-knowledge-export"
+    },
+    "spec_version": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "exported_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "project": {
+      "type": "string"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/knowledge"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/edge"
+      }
+    }
+  },
+  "$defs": {
+    "knowledge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "content",
+        "summary",
+        "tags",
+        "file_refs",
+        "source",
+        "source_kind",
+        "confidence",
+        "valid_from",
+        "visibility",
+        "review_status",
+        "created_at",
+        "updated_at",
+        "archived"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["decision", "pattern", "gotcha", "debug", "context", "dependency", "todo"]
+        },
+        "content": { "type": "string" },
+        "summary": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "file_refs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "source": { "type": "string" },
+        "source_kind": {
+          "type": "string",
+          "enum": ["manual", "git", "mcp", "import", "external", "conversation"]
+        },
+        "source_ref": {
+          "type": ["string", "null"]
+        },
+        "confidence": { "type": "number" },
+        "valid_from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "valid_to": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["shared", "private"]
+        },
+        "review_status": {
+          "type": "string",
+          "enum": ["active", "pending", "rejected"]
+        },
+        "reviewed_at": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "review_note": {
+          "type": ["string", "null"]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "archived": {
+          "type": "boolean"
+        }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "target_id", "type"],
+      "properties": {
+        "source_id": { "type": "string" },
+        "target_id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["relates_to", "caused_by", "depends_on", "supersedes", "implements"]
+        }
+      }
+    }
+  }
+}

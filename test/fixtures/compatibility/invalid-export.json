@@ -1,0 +1,31 @@
+{
+  "spec": "ivn-knowledge-export",
+  "spec_version": "2.0.0",
+  "version": "0.1.0",
+  "exported_at": "not-a-date",
+  "project": "broken-project",
+  "entries": [
+    {
+      "id": "bad-entry",
+      "type": "unknown",
+      "content": 42,
+      "summary": "",
+      "tags": ["ok", 9],
+      "file_refs": "src/app.ts",
+      "source": "manual",
+      "source_kind": "robot",
+      "source_ref": 9,
+      "confidence": "high",
+      "valid_from": "yesterday",
+      "valid_to": false,
+      "visibility": "team",
+      "review_status": "maybe",
+      "reviewed_at": "later",
+      "review_note": 7,
+      "created_at": "never",
+      "updated_at": "never",
+      "archived": "no"
+    }
+  ],
+  "edges": "not-an-array"
+}

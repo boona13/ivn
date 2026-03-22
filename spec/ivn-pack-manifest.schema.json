@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ivn.local/spec/ivn-pack-manifest.schema.json",
+  "title": "IVN Knowledge Pack Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec",
+    "spec_version",
+    "version",
+    "exported_at",
+    "project",
+    "visibility",
+    "count",
+    "merge_strategy",
+    "files"
+  ],
+  "properties": {
+    "spec": {
+      "const": "ivn-knowledge-pack-manifest"
+    },
+    "spec_version": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "exported_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "project": {
+      "type": "string"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": ["shared", "private", "all"]
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "merge_strategy": {
+      "type": "string"
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "json": { "type": "string" },
+        "markdown": { "type": "string" }
+      }
+    }
+  }
+}

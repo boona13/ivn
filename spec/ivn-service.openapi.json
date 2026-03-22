@@ -1,0 +1,717 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "IVN HTTP Service",
+    "version": "1.0.0",
+    "description": "HTTP service mode for IVN project memory. This contract complements MCP by exposing repo knowledge over JSON endpoints."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:3103"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Service health check",
+        "responses": {
+          "200": {
+            "description": "Healthy response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "summary": "Fetch the HTTP OpenAPI contract",
+        "responses": {
+          "200": {
+            "description": "OpenAPI document"
+          }
+        }
+      }
+    },
+    "/v1/spec": {
+      "get": {
+        "summary": "Discover IVN spec metadata",
+        "responses": {
+          "200": {
+            "description": "Spec metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpecResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/status": {
+      "get": {
+        "summary": "Get project knowledge statistics",
+        "responses": {
+          "200": {
+            "description": "Knowledge graph stats",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/knowledge": {
+      "get": {
+        "summary": "List knowledge entries",
+        "parameters": [
+          { "$ref": "#/components/parameters/TypeParam" },
+          { "$ref": "#/components/parameters/LimitParam" },
+          { "$ref": "#/components/parameters/VisibilityParam" },
+          { "$ref": "#/components/parameters/ReviewStatusParam" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Knowledge entries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Store or deduplicate knowledge",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKnowledgeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "New knowledge created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKnowledgeResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Duplicate knowledge resolved to an existing entry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKnowledgeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhooks/knowledge": {
+      "post": {
+        "summary": "Webhook-friendly alias for knowledge ingestion",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKnowledgeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Knowledge created or deduplicated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKnowledgeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/links": {
+      "post": {
+        "summary": "Create a typed relationship between knowledge entries",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLinkRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Relationship created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateLinkResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/recall": {
+      "get": {
+        "summary": "Search knowledge by query",
+        "parameters": [
+          { "$ref": "#/components/parameters/QueryParam" },
+          { "$ref": "#/components/parameters/LimitParam" },
+          { "$ref": "#/components/parameters/FilePathParam" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ranked recall results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecallResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/context": {
+      "get": {
+        "summary": "Render full project context",
+        "parameters": [
+          { "$ref": "#/components/parameters/OptionalQueryParam" },
+          { "$ref": "#/components/parameters/FilePathParam" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rendered markdown context",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContextResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/focus": {
+      "get": {
+        "summary": "Load file-specific knowledge",
+        "parameters": [
+          { "$ref": "#/components/parameters/FilePathRequiredParam" },
+          { "$ref": "#/components/parameters/LimitParam" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Focused knowledge results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecallResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/changed": {
+      "get": {
+        "summary": "Load knowledge relevant to the current git diff",
+        "parameters": [
+          { "$ref": "#/components/parameters/RefParam" },
+          { "$ref": "#/components/parameters/LimitParam" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Changed-file context",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/warn": {
+      "get": {
+        "summary": "Surface proactive warnings for a file or changed diff",
+        "parameters": [
+          { "$ref": "#/components/parameters/FilePathParam" },
+          { "$ref": "#/components/parameters/ChangedParam" },
+          { "$ref": "#/components/parameters/RefParam" },
+          { "$ref": "#/components/parameters/LimitParam" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Warning results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contradictions": {
+      "get": {
+        "summary": "Find conflicting project truths",
+        "parameters": [
+          { "$ref": "#/components/parameters/FilePathParam" },
+          { "$ref": "#/components/parameters/ChangedParam" },
+          { "$ref": "#/components/parameters/RefParam" },
+          { "$ref": "#/components/parameters/LimitParam" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contradiction findings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContradictionsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "QueryParam": {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      "OptionalQueryParam": {
+        "name": "query",
+        "in": "query",
+        "required": false,
+        "schema": { "type": "string" }
+      },
+      "FilePathParam": {
+        "name": "file_path",
+        "in": "query",
+        "required": false,
+        "schema": { "type": "string" }
+      },
+      "FilePathRequiredParam": {
+        "name": "file_path",
+        "in": "query",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      "LimitParam": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": { "type": "integer", "minimum": 1 }
+      },
+      "RefParam": {
+        "name": "ref",
+        "in": "query",
+        "required": false,
+        "schema": { "type": "string" }
+      },
+      "ChangedParam": {
+        "name": "changed",
+        "in": "query",
+        "required": false,
+        "schema": { "type": "boolean" }
+      },
+      "TypeParam": {
+        "name": "type",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": ["decision", "pattern", "gotcha", "debug", "context", "dependency", "todo"]
+        }
+      },
+      "VisibilityParam": {
+        "name": "visibility",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": ["shared", "private", "all"]
+        }
+      },
+      "ReviewStatusParam": {
+        "name": "review_status",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": ["active", "pending", "rejected", "all"]
+        }
+      }
+    },
+    "schemas": {
+      "Knowledge": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "content",
+          "summary",
+          "tags",
+          "file_refs",
+          "source",
+          "source_kind",
+          "source_ref",
+          "confidence",
+          "valid_from",
+          "valid_to",
+          "visibility",
+          "review_status",
+          "reviewed_at",
+          "review_note",
+          "created_at",
+          "updated_at",
+          "archived"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["decision", "pattern", "gotcha", "debug", "context", "dependency", "todo"]
+          },
+          "content": { "type": "string" },
+          "summary": { "type": "string" },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "file_refs": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "source": { "type": "string" },
+          "source_kind": {
+            "type": "string",
+            "enum": ["manual", "git", "mcp", "import", "external", "conversation"]
+          },
+          "source_ref": { "type": ["string", "null"] },
+          "confidence": { "type": "number" },
+          "valid_from": { "type": "string", "format": "date-time" },
+          "valid_to": { "type": ["string", "null"], "format": "date-time" },
+          "visibility": {
+            "type": "string",
+            "enum": ["shared", "private"]
+          },
+          "review_status": {
+            "type": "string",
+            "enum": ["active", "pending", "rejected"]
+          },
+          "reviewed_at": { "type": ["string", "null"], "format": "date-time" },
+          "review_note": { "type": ["string", "null"] },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" },
+          "archived": { "type": "boolean" }
+        }
+      },
+      "Edge": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "source_id", "target_id", "type", "created_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "source_id": { "type": "string" },
+          "target_id": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["relates_to", "caused_by", "depends_on", "supersedes", "implements"]
+          },
+          "created_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CreateKnowledgeRequest": {
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "content": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["decision", "pattern", "gotcha", "debug", "context", "dependency", "todo"]
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "file_refs": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "source": { "type": "string" },
+          "source_kind": {
+            "type": "string",
+            "enum": ["manual", "git", "mcp", "import", "external", "conversation"]
+          },
+          "source_ref": { "type": ["string", "null"] },
+          "confidence": { "type": "number" },
+          "visibility": {
+            "type": "string",
+            "enum": ["shared", "private"]
+          },
+          "review_status": {
+            "type": "string",
+            "enum": ["active", "pending", "rejected"]
+          },
+          "review_note": { "type": ["string", "null"] },
+          "summary": { "type": "string" }
+        }
+      },
+      "CreateKnowledgeResponse": {
+        "type": "object",
+        "required": ["created", "entry"],
+        "properties": {
+          "created": { "type": "boolean" },
+          "entry": { "$ref": "#/components/schemas/Knowledge" }
+        }
+      },
+      "CreateLinkRequest": {
+        "type": "object",
+        "required": ["source_id", "target_id"],
+        "properties": {
+          "source_id": { "type": "string" },
+          "target_id": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["relates_to", "caused_by", "depends_on", "supersedes", "implements"]
+          }
+        }
+      },
+      "CreateLinkResponse": {
+        "type": "object",
+        "required": ["edge"],
+        "properties": {
+          "edge": { "$ref": "#/components/schemas/Edge" }
+        }
+      },
+      "KnowledgeListResponse": {
+        "type": "object",
+        "required": ["entries", "count"],
+        "properties": {
+          "entries": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Knowledge" }
+          },
+          "count": { "type": "integer" }
+        }
+      },
+      "RecallResponse": {
+        "type": "object",
+        "required": ["results", "count"],
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Knowledge" }
+          },
+          "count": { "type": "integer" }
+        }
+      },
+      "ChangedResponse": {
+        "type": "object",
+        "required": ["changed_files", "count"],
+        "properties": {
+          "changed_files": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "results": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Knowledge" }
+          },
+          "warnings": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Knowledge" }
+          },
+          "count": { "type": "integer" }
+        }
+      },
+      "ContextResponse": {
+        "type": "object",
+        "required": ["context"],
+        "properties": {
+          "context": { "type": "string" }
+        }
+      },
+      "ContradictionFinding": {
+        "type": "object",
+        "required": [
+          "kind",
+          "severity",
+          "reason",
+          "primary",
+          "secondary",
+          "edge",
+          "shared_tags",
+          "shared_file_refs",
+          "shared_terms"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["superseded_active", "decision_pattern_conflict"]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["high", "medium"]
+          },
+          "reason": { "type": "string" },
+          "primary": { "$ref": "#/components/schemas/Knowledge" },
+          "secondary": { "$ref": "#/components/schemas/Knowledge" },
+          "edge": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/Edge" },
+              { "type": "null" }
+            ]
+          },
+          "shared_tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "shared_file_refs": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "shared_terms": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "ContradictionsResponse": {
+        "type": "object",
+        "required": ["findings", "count", "file_paths"],
+        "properties": {
+          "findings": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ContradictionFinding" }
+          },
+          "count": { "type": "integer" },
+          "file_paths": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "HealthResponse": {
+        "type": "object",
+        "required": ["ok", "service", "version", "spec_version", "root", "total_entries"],
+        "properties": {
+          "ok": { "type": "boolean" },
+          "service": { "type": "string" },
+          "version": { "type": "string" },
+          "spec_version": { "type": "string" },
+          "root": { "type": "string" },
+          "total_entries": { "type": "integer" }
+        }
+      },
+      "SpecResponse": {
+        "type": "object",
+        "required": ["version", "openapi_url", "knowledge_export_schema_url", "pack_manifest_schema_url"],
+        "properties": {
+          "version": { "type": "string" },
+          "openapi_url": { "type": "string" },
+          "knowledge_export_schema_url": { "type": "string" },
+          "pack_manifest_schema_url": { "type": "string" }
+        }
+      },
+      "StatusResponse": {
+        "type": "object",
+        "required": ["total", "stale_count", "by_type", "recent"],
+        "properties": {
+          "total": { "type": "integer" },
+          "stale_count": { "type": "integer" },
+          "by_type": {
+            "type": "object",
+            "additionalProperties": { "type": "integer" }
+          },
+          "recent": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Knowledge" }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": ["code", "message"],
+            "properties": {
+              "code": { "type": "string" },
+              "message": { "type": "string" },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["field", "message"],
+                  "properties": {
+                    "field": { "type": "string" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

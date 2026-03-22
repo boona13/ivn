@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Usage and setup documentation
+    url: https://github.com/boona13/ivn#readme
+    about: Read the installation, setup, and workflow docs before opening a support issue.
+  - name: Contributing guide
+    url: https://github.com/boona13/ivn/blob/main/CONTRIBUTING.md
+    about: Review contributor expectations, validation commands, and release workflow notes.
+  - name: Report a security vulnerability
+    url: https://github.com/boona13/ivn/security/advisories/new
+    about: Please report vulnerabilities privately instead of opening a public issue.
