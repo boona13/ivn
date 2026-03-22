@@ -11,7 +11,7 @@
     "LICENSE"
   ],
   "bin": {
-    "ivn": "./dist/cli.js"
+    "ivn": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
