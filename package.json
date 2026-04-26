@@ -60,7 +60,7 @@
     "commander": "^14.0.3"
   },
   "optionalDependencies": {
-    "@huggingface/transformers": "^3.8.1"
+    "@huggingface/transformers": "^4.2.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.8",
